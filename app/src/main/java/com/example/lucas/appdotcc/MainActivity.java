@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         btnAbrir = (Button)findViewById(R.id.btnAbrir);
         btnLigar = (Button)findViewById(R.id.btnLigar);
 
-        // Aplicação inicia e tenta checar a existência de módulo Bluetooth.
+        // Aplicação inicia e tenta checar a existência efetiva de módulo Bluetooth.
         BluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // Caso não haja Bluetooth, printa mensagem.
