@@ -3,9 +3,14 @@ package com.example.lucas.appdotcc;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.Set;
@@ -23,8 +28,9 @@ public class devicesList extends ListActivity {
     // Variavel para ser passado o endereço de identificação do Bluetooth.
     static String MAC_ADDRESS = null;
 
+    // Atividade iniciada ao abrir iniciar execução da classe.
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Define layout padrão do Android para lista (Array) de dispositivos pareados.
@@ -46,5 +52,27 @@ public class devicesList extends ListActivity {
             }
         }
         setListAdapter(ArrayBluetooth);
+    }
+
+    // Atividade executada ao clicar em um item da lista,
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        // Variável para pegar informação do item clicado.
+        String info = ((TextView) v).getText().toString();
+
+        // Gera uma substring para mostrar apenas o endereço MAC.
+        String enderecoMac = info.substring(info.length() - 17);
+
+        // Intent que serve como ponte para levar esse MAC-Address até a Main Activity do App.
+        Intent retornaMAC = new Intent();
+        retornaMAC.putExtra(MAC_ADDRESS, enderecoMac);
+
+        // Força resultado da atividade para OK.
+        setResult(RESULT_OK, retornaMAC);
+
+        // Fecha a tela de Lista dos Dispositivos.
+        finish();
     }
 }

@@ -17,8 +17,8 @@
 
     <Button
         android:id="@+id/btnConectar"
-        android:layout_width="104dp"
-        android:layout_height="55dp"
+        android:layout_width="135dp"
+        android:layout_height="59dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="64dp"
