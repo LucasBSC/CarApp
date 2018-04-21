@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Caso tenha conexão, envia string.
                 if (conexao) {
-                    connectedThread.enviar("led1");
+                    connectedThread.enviar("pulsoPorta");
                 // Caso não tenha conexão, printa erro.
                 } else {
                     Toast.makeText(getApplicationContext(), "Bluetooth está desconectado", Toast.LENGTH_LONG).show();
@@ -151,12 +151,12 @@ public class MainActivity extends AppCompatActivity {
                             String dadosFinais = dadosBluetooth.substring(1, tamInformacao);
 
                             // Se recebe 'l1on', botão fica verde
-                            if (dadosFinais.contains("l1on")) {
+                            if (dadosFinais.contains("portaAberta")) {
                                 btnAbrir.setText("FECHAR");
                                 btnPorta.setBackgroundColor(Color.rgb(65, 134, 12));
                             }
 
-                            if (dadosFinais.contains("l1off")) {
+                            if (dadosFinais.contains("portaFechada")) {
                                 btnAbrir.setText("ABRIR");
                                 btnPorta.setBackgroundColor(Color.rgb(191, 25, 25));
                             }
