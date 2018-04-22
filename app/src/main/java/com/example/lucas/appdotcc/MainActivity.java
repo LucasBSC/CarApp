@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Botões
-    Button btnConectar, btnAbrir, btnLigar, btnPorta;
+    Button btnConectar, btnAbrir, btnLigar, btnPorta, btnIgnicao, btnDesligar;
 
 
     @Override
@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         btnAbrir = (Button)findViewById(R.id.btnAbrir);
         btnLigar = (Button)findViewById(R.id.btnLigar);
         btnPorta = (Button)findViewById(R.id.btnPorta);
+        btnIgnicao = (Button)findViewById(R.id.btnIgnicao);
+        btnDesligar = (Button)findViewById(R.id.btnDesligar);
 
         // Aplicação inicia e tenta checar a existência efetiva de módulo Bluetooth.
         BluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -145,6 +147,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnDesligar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Caso tenha conexão, envia string.
+                if (conexao) {
+                    connectedThread.enviar("painel");
+                    connectedThread.enviar("posChave");
+                    connectedThread.enviar("desligarVeiculo");
+                // Caso não tenha conexão, printa erro.
+                } else {
+                    Toast.makeText(getApplicationContext(), "Bluetooth está desconectado", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
         // Handler para tratar toda informação que chega através do Bluetooth.
         mHandler = new Handler() {
             @Override
@@ -177,6 +196,16 @@ public class MainActivity extends AppCompatActivity {
                             if (dadosFinais.contains("portaFechada")) {
                                 btnAbrir.setText("ABRIR");
                                 btnPorta.setBackgroundColor(Color.rgb(191, 25, 25));
+                            }
+
+                            // Se recebe 'carroDesligado', botão fica vermelho.
+                            if (dadosFinais.contains("carroDesligado")) {
+                                btnIgnicao.setBackgroundColor(Color.rgb(191, 25, 25));
+                            }
+
+                            // Se recebe 'carroLigado', botão fica verde.
+                            if (dadosFinais.contains("carroLigado")) {
+                                btnIgnicao.setBackgroundColor(Color.rgb(65, 134, 12));
                             }
 
                         }

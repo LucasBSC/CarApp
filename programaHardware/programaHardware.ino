@@ -11,6 +11,7 @@ String comando;
 
 void setup() {
   bluetooth.begin(9600);
+  Serial.begin(9600);
   pinMode(porta, OUTPUT);
   pinMode(partidaVeiculo, OUTPUT);
   pinMode(painel, OUTPUT);
@@ -64,7 +65,21 @@ void loop() {
     bluetooth.print("{");
     bluetooth.print("portaFechada");
     bluetooth.print("}");
-   }   
+   }
+
+   if (digitalRead(posChave)) {
+    delay(100);
+    bluetooth.print("{");
+    bluetooth.print("carroLigado");
+    bluetooth.print("}");
+   }
+
+   if (!digitalRead(posChave)) {
+    delay(100);
+    bluetooth.print("{");
+    bluetooth.print("carroDesligado");
+    bluetooth.print("}");
+   }
    
   }
 }
