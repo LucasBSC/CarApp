@@ -3,15 +3,18 @@
 SoftwareSerial bluetooth(10,11);
 
 #define porta 3
-#define led2 4
+#define partidaVeiculo 4
+#define painel 5
+#define posChave 6
 
 String comando;
 
 void setup() {
-  //Serial.begin(9600);
   bluetooth.begin(9600);
   pinMode(porta, OUTPUT);
-  pinMode(led2, OUTPUT);
+  pinMode(partidaVeiculo, OUTPUT);
+  pinMode(painel, OUTPUT);
+  pinMode(posChave, OUTPUT);
 }
 
 void loop() {
@@ -24,10 +27,29 @@ void loop() {
     comando += character;
     delay(10);
     }
+    
  // COMANDOS VINDOS DO CELULAR
     if (comando.indexOf("pulsoPorta") >= 0) {
       digitalWrite(porta, !digitalRead(porta));                  
     }
+
+    if (comando.indexOf("painel") >= 0) {
+      digitalWrite(painel, !digitalRead(painel));
+      delay(100);
+    }
+
+    if (comando.indexOf("posChave") >= 0) {
+      digitalWrite(posChave, !digitalRead(posChave));
+      delay(500);
+    }
+
+    if (comando.indexOf("partidaVeiculo") >= 0) {
+      digitalWrite(partidaVeiculo, HIGH);
+      delay(1200);
+      digitalWrite(partidaVeiculo, LOW);
+    }
+
+    
 
  // LEITURAS DO MICROPROCESSADOR
 

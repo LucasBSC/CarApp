@@ -128,6 +128,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnLigar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Caso tenha conexão, envia string.
+                if (conexao) {
+                    connectedThread.enviar("painel");
+                    connectedThread.enviar("posChave");
+                    connectedThread.enviar("partidaVeiculo");
+                    // Caso não tenha conexão, printa erro.
+                } else {
+                    Toast.makeText(getApplicationContext(), "Bluetooth está desconectado", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
         // Handler para tratar toda informação que chega através do Bluetooth.
         mHandler = new Handler() {
             @Override
@@ -137,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 if (msg.what == MESSAGE_READ) {
                     String dadosRecebidos = (String) msg.obj;
                     dadosBluetooth.append(dadosRecebidos);
-                    // Considera '}' o último elemento da informação
+                    // Considera '}' o último elemento da informação.
                     int fimDaInformacao = dadosBluetooth.indexOf("}");
                     // Se esse elemento for maior que zero, então temos informação disponivel e a passamos a uma variável.
                     if (fimDaInformacao > 0) {
@@ -150,12 +167,13 @@ public class MainActivity extends AppCompatActivity {
                         if (dadosBluetooth.charAt(0) == '{') {
                             String dadosFinais = dadosBluetooth.substring(1, tamInformacao);
 
-                            // Se recebe 'l1on', botão fica verde
+                            // Se recebe 'portaAberta', botão fica verde.
                             if (dadosFinais.contains("portaAberta")) {
                                 btnAbrir.setText("FECHAR");
                                 btnPorta.setBackgroundColor(Color.rgb(65, 134, 12));
                             }
 
+                            // Se recebe 'portaFechada', botão fica vermelho.
                             if (dadosFinais.contains("portaFechada")) {
                                 btnAbrir.setText("ABRIR");
                                 btnPorta.setBackgroundColor(Color.rgb(191, 25, 25));
@@ -248,11 +266,10 @@ public class MainActivity extends AppCompatActivity {
 
         public void run() {
             byte[] buffer = new byte[1024]; // Buffer para o canal de comunicação.
-            int bytes; // Bytes que retornam do read().
+            int bytes; // Variável para guardar os Bytes que retornam do read().
 
             // Escuta a InputStream até ocorrer erro de Exception.
-
-           while (true) {
+            while (true) {
                 try {
                     // Lê os dados da InputStream.
                     bytes = mmInStream.read(buffer);
