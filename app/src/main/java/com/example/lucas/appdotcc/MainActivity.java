@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Botões
-    Button btnConectar, btnAbrir, btnLigar, btnPorta, btnIgnicao, btnDesligar;
+    Button btnConectar, btnAbrir, btnFechar, btnLigar, btnPorta, btnIgnicao, btnDesligar;
 
 
     @Override
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         // Link dos botões da interface com a lógica de programação.
         btnConectar = (Button)findViewById(R.id.btnConectar);
         btnAbrir = (Button)findViewById(R.id.btnAbrir);
+        btnFechar = (Button)findViewById(R.id.btnFechar);
         btnLigar = (Button)findViewById(R.id.btnLigar);
         btnPorta = (Button)findViewById(R.id.btnPorta);
         btnIgnicao = (Button)findViewById(R.id.btnIgnicao);
@@ -115,14 +116,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Cria um Listener de click para o Botão ABRIR.
+        btnFechar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Caso tenha conexão, envia string.
+                if (conexao) {
+                    connectedThread.enviar("pulsoFechar");
+                // Caso não tenha conexão, printa erro.
+                } else {
+                    Toast.makeText(getApplicationContext(), "Bluetooth está desconectado", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
         btnAbrir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 // Caso tenha conexão, envia string.
                 if (conexao) {
-                    connectedThread.enviar("pulsoPorta");
-                // Caso não tenha conexão, printa erro.
+                    connectedThread.enviar("pulsoAbrir");
+                    // Caso não tenha conexão, printa erro.
                 } else {
                     Toast.makeText(getApplicationContext(), "Bluetooth está desconectado", Toast.LENGTH_LONG).show();
                 }
@@ -188,13 +204,11 @@ public class MainActivity extends AppCompatActivity {
 
                             // Se recebe 'portaAberta', botão fica verde.
                             if (dadosFinais.contains("portaAberta")) {
-                                btnAbrir.setText("FECHAR");
                                 btnPorta.setBackgroundColor(Color.rgb(65, 134, 12));
                             }
 
                             // Se recebe 'portaFechada', botão fica vermelho.
                             if (dadosFinais.contains("portaFechada")) {
-                                btnAbrir.setText("ABRIR");
                                 btnPorta.setBackgroundColor(Color.rgb(191, 25, 25));
                             }
 

@@ -1,8 +1,8 @@
 #include <SoftwareSerial.h>
 
 SoftwareSerial bluetooth(10,11);
-
-#define porta 3
+#define fecharPorta 2
+#define abrirPorta 3
 #define partidaVeiculo 4
 #define painel 5
 #define posChave 6
@@ -11,8 +11,8 @@ String comando;
 
 void setup() {
   bluetooth.begin(9600);
-  Serial.begin(9600);
-  pinMode(porta, OUTPUT);
+  pinMode(abrirPorta, OUTPUT);
+  pinMode(fecharPorta, OUTPUT);
   pinMode(partidaVeiculo, OUTPUT);
   pinMode(painel, OUTPUT);
   pinMode(posChave, OUTPUT);
@@ -30,9 +30,27 @@ void loop() {
     }
     
  // COMANDOS VINDOS DO CELULAR
-    if (comando.indexOf("pulsoPorta") >= 0) {
-      digitalWrite(porta, !digitalRead(porta));                  
+     if (comando.indexOf("pulsoAbrir") >= 0) {
+      digitalWrite(abrirPorta, HIGH);
+      delay(1000);
+      // MENSAGEM PARA APLICATIVO
+      bluetooth.print("{");
+      bluetooth.print("portaAberta");
+      bluetooth.print("}");
+      delay(50);
+      digitalWrite(abrirPorta, LOW);                  
     }
+
+    if (comando.indexOf("pulsoFechar") >= 0) {
+      digitalWrite(fecharPorta, HIGH);
+      delay(1000);
+      // MENSAGEM PARA APLICATIVO
+      bluetooth.print("{");
+      bluetooth.print("portaFechada");
+      bluetooth.print("}");
+      delay(50);
+      digitalWrite(fecharPorta, LOW);                  
+    }   
 
     if (comando.indexOf("painel") >= 0) {
       digitalWrite(painel, !digitalRead(painel));
@@ -53,19 +71,6 @@ void loop() {
     
 
  // LEITURAS DO MICROPROCESSADOR
-
-   // Se porta está aberta, envia mensagem
-   if (digitalRead(porta)) {
-    bluetooth.print("{");
-    bluetooth.print("portaAberta");
-    bluetooth.print("}");
-   }
-
-   if (!digitalRead(porta)) {
-    bluetooth.print("{");
-    bluetooth.print("portaFechada");
-    bluetooth.print("}");
-   }
 
    if (digitalRead(posChave)) {
     delay(100);
