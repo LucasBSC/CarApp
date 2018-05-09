@@ -1,11 +1,11 @@
 #include <SoftwareSerial.h>
 
 SoftwareSerial bluetooth(10,11);
-#define fecharPorta 2
 #define abrirPorta 3
-#define partidaVeiculo 4
-#define painel 5
-#define posChave 6
+#define fecharPorta 4
+#define partidaVeiculo 5
+#define painel 6
+#define posChave 7
 
 String comando;
 
